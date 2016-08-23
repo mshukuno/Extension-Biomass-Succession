@@ -238,8 +238,8 @@ namespace Landis.Extension.Succession.Biomass
 
             for (int y = 1; y <= years; ++y)
             {
-                if (PlugIn.ModelCore.CurrentTime > 0)
-                    SpeciesData.ChangeDynamicParameters(PlugIn.ModelCore.CurrentTime + y - 1);
+
+                SpeciesData.ChangeDynamicParameters(PlugIn.ModelCore.CurrentTime + y - 1);
 
                 SiteVars.ResetAnnualValues(site);
                 CohortBiomass.SubYear = y - 1;
@@ -293,7 +293,8 @@ namespace Landis.Extension.Succession.Biomass
 
         public void AddNewCohort(ISpecies species, ActiveSite site)
         {
-            SiteVars.Cohorts[site].AddNewCohort(species, 1, CohortBiomass.InitialBiomass(species, SiteVars.Cohorts[site], site));
+            int initialBiomass = CohortBiomass.InitialBiomass(species, SiteVars.Cohorts[site], site);
+            SiteVars.Cohorts[site].AddNewCohort(species, 1, initialBiomass, (int)(initialBiomass*0.35),(int)(initialBiomass*0.35));
         }
         //---------------------------------------------------------------------
 

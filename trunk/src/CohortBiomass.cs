@@ -69,6 +69,14 @@ namespace Landis.Extension.Succession.Biomass
 
             double actualANPP = ComputeActualANPP(cohort, site);
 
+            double leafFraction = ComputeFractionANPPleaf(cohort.Species);
+
+            // Mortality reduces the amount of new foliage
+            int annualLeafANPP = (int)Math.Round((actualANPP * leafFraction));
+            cohort.ChangeCurrentFoliage(annualLeafANPP);
+            int newTotalFoliage = (int)Math.Round((annualLeafANPP + cohort.TotalFoliage * (1 - (1 / SpeciesData.LeafLongevity[cohort.Species]))));
+            cohort.ChangeTotalFoliage(newTotalFoliage);
+
             //  Age mortality is discounted from ANPP to prevent the over-
             //  estimation of mortality.  ANPP cannot be negative.
             actualANPP = Math.Max(1, actualANPP - mortalityAge);
@@ -77,7 +85,7 @@ namespace Landis.Extension.Succession.Biomass
 
             // ---------------------------------------------------------
             //  Growth-related mortality
-            double mortalityGrowth = ComputeGrowthMortality(cohort, site);
+            double mortalityGrowth = ComputeGrowthMortality(cohort, site, actualANPP);
 
             //  Age-related mortality is discounted from growth-related
             //  mortality to prevent the under-estimation of mortality.  Cannot be negative.
@@ -114,6 +122,9 @@ namespace Landis.Extension.Succession.Biomass
             double newBiomass = cohort.Biomass + (double)deltaBiomass;
 
             double totalLitter = UpdateDeadBiomass(cohort, actualANPP, totalMortality, site, newBiomass);
+
+
+
 
             if (PlugIn.CalibrateMode && PlugIn.ModelCore.CurrentTime > 0)
             {
@@ -260,7 +271,41 @@ namespace Landis.Extension.Succession.Biomass
             return M_BIO;
 
         }
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// The mortality caused by development processes,
+        /// including self-thinning and loss of branches, twigs, etc.
+        /// See equation 5 in Scheller and Mladenoff, 2004.
+        /// Modified from v3 to use actualANPP instead of maxANPP
+        /// growth mortality should be relative to actual growth rate
+        /// when B_AP = 1, M_BIO == actualANPP -> steady state
+        /// </summary>
+        private double ComputeGrowthMortality(ICohort cohort, ActiveSite site, double actualANPP)
+        {
+           
+            double M_BIO = 0.0;
 
+            //Michaelis-Menton function:
+            if (B_AP > 1.0)
+                M_BIO = actualANPP * B_PM;
+            else
+                M_BIO = actualANPP * (2.0 * B_AP) / (1.0 + B_AP) * B_PM;
+
+            //  Mortality should not exceed the amount of living biomass
+            M_BIO = Math.Min(cohort.Biomass, M_BIO);
+
+            //  Calculated actual ANPP can not exceed the limit set by the
+            //  maximum ANPP times the ratio of potential to maximum biomass.
+            //  This down regulates actual ANPP by the available growing space.
+
+            M_BIO = Math.Min(actualANPP * B_PM, M_BIO);
+
+            if (growthReduction > 0)
+                M_BIO *= (1.0 - growthReduction);
+
+            return M_BIO;
+
+        }
         //---------------------------------------------------------------------
 
         private double UpdateDeadBiomass(ICohort cohort, double actualANPP, double totalMortality, ActiveSite site, double newBiomass)

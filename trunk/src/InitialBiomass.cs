@@ -73,7 +73,7 @@ namespace Landis.Extension.Succession.Biomass
              SiteCohorts clone = new SiteCohorts();
              foreach (ISpeciesCohorts speciesCohorts in site_cohorts)
                  foreach (ICohort cohort in speciesCohorts)
-                     clone.AddNewCohort(cohort.Species, cohort.Age, cohort.Biomass);  //species.cohorts.Add(speciesCohorts.Clone());
+                     clone.AddNewCohort(cohort.Species, cohort.Age, cohort.Biomass,cohort.CurrentFoliage,cohort.TotalFoliage);  //species.cohorts.Add(speciesCohorts.Clone());
              return clone;
          }
         //---------------------------------------------------------------------
@@ -238,7 +238,7 @@ namespace Landis.Extension.Succession.Biomass
                     int initialBiomass = initialBiomassMethod(species, SiteVars.Cohorts[site], site);
 
                     SiteVars.Cohorts[site].AddNewCohort(ageCohorts[indexNextAgeCohort].Species, 1,
-                                                initialBiomass);
+                                                initialBiomass, (int)(initialBiomass*0.35),(int)(initialBiomass*0.35));
 
 
                     //foreach (ISpeciesCohorts spp in SiteVars.Cohorts[site])
