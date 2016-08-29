@@ -21,6 +21,7 @@ namespace Landis.Extension.Succession.Biomass
             public const string AgeOnlyDisturbanceParms = "AgeOnlyDisturbances:BiomassParameters";
             public const string DynamicInputFile = "DynamicInputFile";
             public const string CalibrateMode = "CalibrateMode";
+            public const string ANPPOutputMap = "ANPPOutputMap";
         }
         //---------------------------------------------------------------------
         public override string LandisDataValue
@@ -266,7 +267,7 @@ namespace Landis.Extension.Succession.Biomass
 
 
             string lastParameter = null;
-            if (! AtEndOfInput && CurrentName == Names.AgeOnlyDisturbanceParms) {
+            if (!AtEndOfInput && CurrentName == Names.AgeOnlyDisturbanceParms) {
                 InputVar<string> ageOnlyDisturbanceParms = new InputVar<string>(Names.AgeOnlyDisturbanceParms);
                 ReadVar(ageOnlyDisturbanceParms);
                 parameters.AgeOnlyDisturbanceParms = ageOnlyDisturbanceParms.Value;
@@ -274,6 +275,14 @@ namespace Landis.Extension.Succession.Biomass
                 lastParameter = "the " + Names.AgeOnlyDisturbanceParms + " parameter";
             }
 
+            if (!AtEndOfInput && CurrentName == Names.ANPPOutputMap)
+            {
+                InputVar<string> anppOutputMap = new InputVar<string>(Names.ANPPOutputMap);
+                ReadVar(anppOutputMap);
+                parameters.ANPPOutputMap = anppOutputMap.Value;
+
+                lastParameter = "the " + Names.ANPPOutputMap + " parameter";
+            }
             if (lastParameter != null)
                 CheckNoDataAfter(lastParameter);
 

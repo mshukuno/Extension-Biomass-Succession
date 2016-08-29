@@ -36,6 +36,7 @@ namespace Landis.Extension.Succession.Biomass
         private string ageOnlyDisturbanceParms;
         private string initCommunities;
         private string communitiesMap;
+        private string anppOutputMap;
 
         //---------------------------------------------------------------------
         /// <summary>
@@ -308,6 +309,26 @@ namespace Landis.Extension.Succession.Biomass
             }
         }
 
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Path and filename for the optional ANPP output files.
+        /// </summary>
+        public string ANPPOutputMap
+        {
+            get
+            {
+                return anppOutputMap;
+            }
+
+            set
+            {
+                if (value != null)
+                {
+                    ValidatePath(value);
+                }
+                anppOutputMap = value;
+            }
+        }
         //---------------------------------------------------------------------
 
         public void SetAET(IEcoregion           ecoregion,

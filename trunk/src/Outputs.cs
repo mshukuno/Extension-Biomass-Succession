@@ -14,11 +14,12 @@ namespace Landis.Extension.Succession.Biomass
         //private static string mapNameTemplate;
         // private static string logFileName;
         private static StreamWriter log;
+        private static string anppOutputMap;
 
         //---------------------------------------------------------------------
         public static void Initialize(IInputParameters parameters)
         {
-
+            anppOutputMap = parameters.ANPPOutputMap;
             string logFileName   = "Biomass-succession-v3-log.csv";
             PlugIn.ModelCore.UI.WriteLine("   Opening Biomass-succession log file \"{0}\" ...", logFileName);
             try {
@@ -87,22 +88,26 @@ namespace Landis.Extension.Succession.Biomass
                 }
             }
 
-            string path = MapNames.ReplaceTemplateVars("biomass-anpp-{timestep}.img", PlugIn.ModelCore.CurrentTime);
-            using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(path, PlugIn.ModelCore.Landscape.Dimensions))
+            if (!(anppOutputMap == null))
             {
-                IntPixel pixel = outputRaster.BufferPixel;
-                foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                string path = MapNames.ReplaceTemplateVars(anppOutputMap, PlugIn.ModelCore.CurrentTime);
+                System.IO.Directory.CreateDirectory(Path.GetDirectoryName(path));
+                using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(path, PlugIn.ModelCore.Landscape.Dimensions))
                 {
-                    if (site.IsActive)
+                    IntPixel pixel = outputRaster.BufferPixel;
+                    foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
                     {
-                        pixel.MapCode.Value = (int)SiteVars.AGNPP[site];
+                        if (site.IsActive)
+                        {
+                            pixel.MapCode.Value = (int)SiteVars.AGNPP[site];
+                        }
+                        else
+                        {
+                            //  Inactive site
+                            pixel.MapCode.Value = 0;
+                        }
+                        outputRaster.WriteBufferPixel();
                     }
-                    else
-                    {
-                        //  Inactive site
-                        pixel.MapCode.Value = 0;
-                    }
-                    outputRaster.WriteBufferPixel();
                 }
             }
         }
