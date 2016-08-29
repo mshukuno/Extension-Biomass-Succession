@@ -12,7 +12,7 @@ CellLength  100 << meters, 100 x 100 m = 1 ha
 
 >> Succession Extension     Initialization File
 >> --------------------     -------------------
-   "Biomass Succession"    biomass-succession.txt
+   "Biomass Succession vSBW"    biomass-succession.txt
 
 
 >> Disturbance Extensions   Initialization File

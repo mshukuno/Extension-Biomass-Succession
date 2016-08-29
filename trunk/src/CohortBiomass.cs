@@ -85,7 +85,7 @@ namespace Landis.Extension.Succession.Biomass
 
             // ---------------------------------------------------------
             //  Growth-related mortality
-            double mortalityGrowth = ComputeGrowthMortality(cohort, site, actualANPP);
+            double mortalityGrowth = ComputeGrowthMortality(cohort, site);
 
             //  Age-related mortality is discounted from growth-related
             //  mortality to prevent the under-estimation of mortality.  Cannot be negative.
