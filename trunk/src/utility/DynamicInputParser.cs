@@ -15,8 +15,6 @@ namespace Landis.Extension.Succession.Biomass
         : TextParser<Dictionary<int, IDynamicInputRecord[,]>>
     {
 
-        //private string FileName = "Dynamic Input Data";
-
         public override string LandisDataValue
         {
             get
@@ -36,12 +34,7 @@ namespace Landis.Extension.Succession.Biomass
         protected override Dictionary<int, IDynamicInputRecord[,]> Parse()
         {
 
-            //InputVar<string> landisData = new InputVar<string>("LandisData");
-            //ReadVar(landisData);
-            //if (landisData.Value.Actual != FileName)
-            //    throw new InputValueException(landisData.Value.String, "The value is not \"{0}\"", PlugIn.ExtensionName);
             ReadLandisDataVar();
-
             
             Dictionary<int, IDynamicInputRecord[,]> allData = new Dictionary<int, IDynamicInputRecord[,]>();
 
@@ -53,6 +46,7 @@ namespace Landis.Extension.Succession.Biomass
             InputVar<double> pest = new InputVar<double>("Probability of Establishment");
             InputVar<int> anpp = new InputVar<int>("ANPP");
             InputVar<int> bmax = new InputVar<int>("Maximum Biomass");
+            InputVar<double> pmort = new InputVar<double>("Probability of Mortality");
 
             while (! AtEndOfInput)
             {
@@ -87,9 +81,12 @@ namespace Landis.Extension.Succession.Biomass
                 ReadValue(bmax, currentLine);
                 dynamicInputRecord.B_MAX_Spp = bmax.Value;
 
+                ReadValue(pmort, currentLine);
+                dynamicInputRecord.ProbMortality = pmort.Value;
+
                 allData[yr][species.Index, ecoregion.Index] = dynamicInputRecord;
 
-                CheckNoDataAfter("the " + bmax.Name + " column",
+                CheckNoDataAfter("the " + pmort.Name + " column",
                                  currentLine);
 
                 GetNextLine();
@@ -108,10 +105,6 @@ namespace Landis.Extension.Succession.Biomass
                 throw new InputValueException(ecoregionName.String,
                                               "{0} is not an ecoregion name.",
                                               ecoregionName.String);
-            //if (!ecoregion.Active)
-            //    throw new InputValueException(ecoregionName.String,
-            //                                  "{0} is not an active ecoregion.",
-            //                                  ecoregionName.String);
 
             return ecoregion;
         }

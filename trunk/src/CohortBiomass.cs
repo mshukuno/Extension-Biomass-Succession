@@ -109,6 +109,24 @@ namespace Landis.Extension.Succession.Biomass
                 SiteVars.Defoliation[site] += defoliationLoss;
             }
             // ---------------------------------------------------------
+            // ******************************************
+            // RMS:  Adding extra mortality for aspen
+            // ******************************************
+            if (PlugIn.ModelCore.CurrentTime > 0)
+            {
+                bool mortalityDrought = false;
+                if (PlugIn.ModelCore.GenerateUniform() < SpeciesData.MortalityProbability[cohort.Species, ecoregion])
+                    mortalityDrought = true;
+
+                if (mortalityDrought)
+                {
+                    totalMortality += cohort.Biomass * 0.5;
+                    //actualANPP = 0.0;
+                    //deltaBiomass -= (int)(cohort.Biomass * 0.5);
+                    //deltaBiomass = Math.Min(deltaBiomass, cohort.Biomass);
+                }
+            }
+            // ******************************************
 
             int deltaBiomass = (int)(actualANPP - totalMortality - defoliationLoss);
             double newBiomass = cohort.Biomass + (double)deltaBiomass;
