@@ -49,17 +49,6 @@ namespace Landis.Extension.Succession.Biomass.AgeOnlyDisturbances
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-/*        public ParameterDataset(IPercentageTable cohortReductions,
-                                IPercentageTable poolReductions)
-        {
-            this.cohortReductions = cohortReductions;
-            this.poolReductions = poolReductions;
-        }*/
-        //---------------------------------------------------------------------
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
         public ParameterDataset()
         {
             cohortReductions = new PercentageTable();

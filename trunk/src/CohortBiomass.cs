@@ -393,17 +393,7 @@ namespace Landis.Extension.Succession.Biomass
         {
             IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
 
-            double B_ACT = 0;  // Actual biomass - excluding "young" cohorts added in the same timestep
-            // Copied from Library.BiomassCohorts.Cohorts.cs, but added restriction that age > 1 (required when running 1-year timestep)
-            foreach (ISpeciesCohorts speciesCohorts in cohorts)
-            {
-                foreach (ICohort cohort in speciesCohorts)
-                {
-                    if ((cohort.Age >= PlugIn.SuccessionTimeStep) && (cohort.Age > 1))
-                        B_ACT += cohort.Biomass;
-                }
-            }
-
+            double B_ACT = (double) Cohorts.ComputeNonYoungBiomass(cohorts);
 
             double maxBiomass = SpeciesData.B_MAX_Spp[species,ecoregion];
 
@@ -417,8 +407,8 @@ namespace Landis.Extension.Succession.Biomass
             // Initial biomass cannot be greater than maxANPP
             initialBiomass = Math.Min(maxANPP, initialBiomass);
 
-            //  Initial biomass cannot be less than 2.  C. Dymond issue from August 2016
-            initialBiomass = Math.Max(2.0, initialBiomass);
+            //  Initial biomass cannot be less than 1.
+            initialBiomass = Math.Max(1.0, initialBiomass);
 
             return (int)initialBiomass;
         }
@@ -427,8 +417,6 @@ namespace Landis.Extension.Succession.Biomass
         // New method for calculating competition limits.
         // Iterates through cohorts, assigning each a competitive efficiency
 
-        // The SiteVars.Cohorts here already reflects growth of some cohorts within the timestep.  Ideally that would not be the case, at least for cohorts of the same age.  Otherwise, the order they are listed influences their competion.
-        // FIXME
         private static double CalculateCompetition(ActiveSite site, ICohort cohort)
         {
             double competitionPower = 0.95;
