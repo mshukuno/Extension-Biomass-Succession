@@ -13,12 +13,12 @@
 #include "package (Setup section) v6.0.iss"
 
 [Files]
-Source: ..\..\src\bin\Debug\Landis.Extension.Biomass-vIdaho.dll; DestDir: {#ExtDir}; Flags: replacesameversion
-Source: ..\..\src\bin\Debug\Landis.Extension.Biomass-vIdaho.pdb; DestDir: {#ExtDir}; Flags: replacesameversion
+Source: ..\..\src\bin\Debug\Landis.Extension.Succession.Biomass-Mortality.dll; DestDir: {#ExtDir}; Flags: replacesameversion
+Source: ..\..\src\bin\Debug\Landis.Extension.Succession.Biomass-Mortality.pdb; DestDir: {#ExtDir}; Flags: replacesameversion
 
 Source: ..\..\src\bin\Debug\Landis.Library.Biomass-v1.dll; DestDir: {#ExtDir}; Flags: replacesameversion uninsneveruninstall
-Source: ..\..\src\bin\Debug\Landis.Library.Succession.dll; DestDir: {#ExtDir}; Flags: replacesameversion uninsneveruninstall
-Source: ..\..\src\bin\Debug\Landis.Library.BiomassCohorts.dll; DestDir: {#ExtDir}; Flags: replacesameversion uninsneveruninstall
+Source: ..\..\src\bin\Debug\Landis.Library.Succession-v5.dll; DestDir: {#ExtDir}; Flags: replacesameversion uninsneveruninstall
+Source: ..\..\src\bin\Debug\Landis.Library.BiomassCohorts-v2.dll; DestDir: {#ExtDir}; Flags: replacesameversion uninsneveruninstall
 Source: ..\..\src\bin\Debug\Landis.Library.AgeOnlyCohorts.dll; DestDir: {#ExtDir}; Flags: replacesameversion uninsneveruninstall
 Source: ..\..\src\bin\Debug\Landis.Library.Cohorts.dll; DestDir: {#ExtDir}; Flags: replacesameversion uninsneveruninstall
 Source: ..\..\src\bin\Debug\Landis.Library.Parameters-v1.dll; DestDir: {#ExtDir}; Flags: replacesameversion uninsneveruninstall
