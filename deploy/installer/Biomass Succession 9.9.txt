@@ -3,7 +3,7 @@ LandisData   Extension
 Name         "Biomass Succession Mortality"
 Version      9.9.9
 Type         succession
-Assembly     Landis.Extension.Succession.Biomass
+Assembly     Landis.Extension.Succession.Biomass-Mortality
 Class        Landis.Extension.Succession.Biomass.PlugIn
 Description  "Succession with biomass cohorts"
 CoreVersion  6.0
